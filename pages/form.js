@@ -1,13 +1,13 @@
 import Head from "next/head";
 import Layout, { siteTitle } from "../components/layout";
 
-export default function Home() {
+export default function Form() {
     return (
-        <Layout home>
+        <Layout>
             <Head>
                 <title>{siteTitle}</title>
             </Head>
-            <h1>Home page</h1>
+            <h1>Form page</h1>
         </Layout>
     );
 }
