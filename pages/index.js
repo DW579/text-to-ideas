@@ -4,7 +4,7 @@ import { Form, Button } from "react-bootstrap";
 import React, { useState } from "react";
 
 export default function Home() {
-    const [item, setItem] = useState({ typeOfIdeas: "", another: "another" });
+    const [item, setItem] = useState({ typeOfIdeas: "" });
 
     const { typeOfIdeas } = item;
 
@@ -18,6 +18,11 @@ export default function Home() {
         }));
     };
 
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        alert(`${typeOfIdeas}`);
+      };
+
     return (
         <Layout home>
             <Head>
@@ -25,7 +30,7 @@ export default function Home() {
             </Head>
             <h1>Welcome to Text-to-Ideas!</h1>
             <p>Upload a document or text and let the LLM figure what is the main issue within the text and present you with project ideas to solve the issue.</p>
-            <Form>
+            <Form onSubmit={handleSubmit}>
                 <Form.Group
                     controlId="formFile"
                     className="mb-3"
@@ -61,6 +66,7 @@ export default function Home() {
                         checked={typeOfIdeas === "mechanical"}
                     />
                 </Form.Group>
+                <Button variant="primary" type="submit">Submit</Button>
             </Form>
         </Layout>
     );
