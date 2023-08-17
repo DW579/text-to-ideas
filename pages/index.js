@@ -6,33 +6,32 @@ import axios from "axios";
 
 export default function Home() {
     const [formData, setFormData] = useState({
-        ideaType: "",
-        document: null,
+        type: "",
+        text: "",
     });
 
-    const handleFileChange = (e) => {
-        const file = e.target.files[0];
-
+    const handleTextChange = (e) => {
+        const text = e.target.value;
         setFormData((prevData) => ({
             ...prevData,
-            document: file,
+            text,
         }));
     };
 
-    const handleIdeaTypeChange = (e) => {
+    const handleTypeChange = (e) => {
         e.persist();
         console.log(e.target.value);
 
         setFormData((prevState) => ({
             ...prevState,
-            ideaType: e.target.value,
+            type: e.target.value,
         }));
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post("/api/hello", formData);
+            const response = await axios.post("/api/form", formData);
             console.log("Form submitted successfully!", response.data);
         } catch (error) {
             console.error("Error submitting form:", error);
@@ -48,25 +47,16 @@ export default function Home() {
             <p>Upload a document or text and let the LLM figure what is the main issue within the text and present you with project ideas to solve the issue.</p>
             <Form onSubmit={handleSubmit}>
                 <Form.Group
-                    controlId="formFile"
-                    className="mb-3"
-                >
-                    <Form.Label>Upload document</Form.Label>
-                    <Form.Control
-                        type="file"
-                        name="document"
-                        accept=".pdf,.doc,.docx,.txt"
-                        onChange={handleFileChange}
-                    />
-                </Form.Group>
-                <Form.Group
                     className="mb-3"
                     controlId="exampleForm.ControlTextarea1"
                 >
                     <Form.Label>Copy and Paste if needed</Form.Label>
                     <Form.Control
                         as="textarea"
-                        rows={3}
+                        rows={4}
+                        name="textValue"
+                        value={formData.text}
+                        onChange={handleTextChange}
                     />
                 </Form.Group>
                 <Form.Group controlId="typeOptions">
@@ -75,16 +65,16 @@ export default function Home() {
                         name="selectedOption"
                         value="large language model (llm)"
                         label="Large Language Model (LLM)"
-                        checked={formData.ideaType === "large language model (llm)"}
-                        onChange={handleIdeaTypeChange}
+                        checked={formData.type === "large language model (llm)"}
+                        onChange={handleTypeChange}
                     />
                     <Form.Check
                         type="radio"
                         name="selectedOption"
                         value="mechanical"
                         label="Mechanical"
-                        checked={formData.ideaType === "mechanical"}
-                        onChange={handleIdeaTypeChange}
+                        checked={formData.type === "mechanical"}
+                        onChange={handleTypeChange}
                     />
                 </Form.Group>
                 <Button
