@@ -5,24 +5,25 @@ import React, { useState } from "react";
 import axios from "axios";
 
 export default function Home() {
-    const [item, setItem] = useState({ typeOfIdeas: "" });
+    const [formData, setFormData] = useState({
+        ideaType: "",
+        document: null,
+    });
 
-    const { typeOfIdeas } = item;
-
-    const handleChange = (e) => {
+    const handleIdeaTypeChange = (e) => {
         e.persist();
         console.log(e.target.value);
 
-        setItem((prevState) => ({
+        setFormData((prevState) => ({
             ...prevState,
-            typeOfIdeas: e.target.value,
+            ideaType: e.target.value,
         }));
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post("/api/hello", typeOfIdeas);
+            const response = await axios.post("/api/hello", formData);
             console.log("Form submitted successfully!", response.data);
         } catch (error) {
             console.error("Error submitting form:", error);
@@ -54,22 +55,22 @@ export default function Home() {
                         rows={3}
                     />
                 </Form.Group>
-                <Form.Group controlId="typeOfIdeas">
+                <Form.Group controlId="typeOptions">
                     <Form.Check
-                        value="large language model (llm)"
                         type="radio"
-                        aria-label="radio 1"
+                        name="selectedOption"
+                        value="large language model (llm)"
                         label="Large Language Model (LLM)"
-                        onChange={handleChange}
-                        checked={typeOfIdeas === "large language model (llm)"}
+                        checked={formData.ideaType === "large language model (llm)"}
+                        onChange={handleIdeaTypeChange}
                     />
                     <Form.Check
-                        value="mechanical"
                         type="radio"
-                        aria-label="radio 2"
+                        name="selectedOption"
+                        value="mechanical"
                         label="Mechanical"
-                        onChange={handleChange}
-                        checked={typeOfIdeas === "mechanical"}
+                        checked={formData.ideaType === "mechanical"}
+                        onChange={handleIdeaTypeChange}
                     />
                 </Form.Group>
                 <Button
