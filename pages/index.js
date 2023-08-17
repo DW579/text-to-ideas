@@ -10,6 +10,15 @@ export default function Home() {
         document: null,
     });
 
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+
+        setFormData((prevData) => ({
+            ...prevData,
+            document: file,
+        }));
+    };
+
     const handleIdeaTypeChange = (e) => {
         e.persist();
         console.log(e.target.value);
@@ -43,7 +52,12 @@ export default function Home() {
                     className="mb-3"
                 >
                     <Form.Label>Upload document</Form.Label>
-                    <Form.Control type="file" />
+                    <Form.Control
+                        type="file"
+                        name="document"
+                        accept=".pdf,.doc,.docx,.txt"
+                        onChange={handleFileChange}
+                    />
                 </Form.Group>
                 <Form.Group
                     className="mb-3"
