@@ -2,6 +2,7 @@ import Head from "next/head";
 import Layout, { siteTitle } from "../components/layout";
 import { Form, Button } from "react-bootstrap";
 import React, { useState } from "react";
+import axios from "axios";
 
 export default function Home() {
     const [item, setItem] = useState({ typeOfIdeas: "" });
@@ -18,10 +19,15 @@ export default function Home() {
         }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        alert(`${typeOfIdeas}`);
-      };
+        try {
+            const response = await axios.post("/api/hello", typeOfIdeas);
+            console.log("Form submitted successfully!", response.data);
+        } catch (error) {
+            console.error("Error submitting form:", error);
+        }
+    };
 
     return (
         <Layout home>
@@ -66,7 +72,12 @@ export default function Home() {
                         checked={typeOfIdeas === "mechanical"}
                     />
                 </Form.Group>
-                <Button variant="primary" type="submit">Submit</Button>
+                <Button
+                    variant="primary"
+                    type="submit"
+                >
+                    Submit
+                </Button>
             </Form>
         </Layout>
     );
