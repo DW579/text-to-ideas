@@ -3,12 +3,13 @@ import { OpenAI } from "langchain/llms/openai";
 import { PromptTemplate } from "langchain/prompts";
 import { SimpleSequentialChain, LLMChain } from "langchain/chains";
 import { TextLoader } from "langchain/document_loaders/fs/text";
-import { loadQAStuffChain } from "langchain/chains";
-import { Document } from "langchain/document";
 
 import { loadQARefineChain } from "langchain/chains";
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
 import { OpenAIEmbeddings } from "langchain/embeddings/openai";
+
+import { z } from "zod";
+import { StructuredOutputParser } from "langchain/output_parsers";
 
 export default async function handler(req, res) {
     try {
@@ -59,18 +60,33 @@ export default async function handler(req, res) {
         });
 
         // This is an LLMChain to create 5 ideas to solve the main issue
+        // Create a Zod schema to validate the structure of the output from the LLM chain to make sure it is valid JSON and has the correct keys and values
+        const ideasParser = StructuredOutputParser.fromZodSchema(
+            z.object({
+                issue: z.string().describe("main issue of the summary"),
+                ideas: z.array(
+                    z.object({
+                        title: z.string().describe("title of the idea"),
+                        description: z.string().describe("description of the idea"),
+                    })
+                ),
+            })
+        );
+
+        const ideasFormatInstructions = ideasParser.getFormatInstructions();
+
         const ideasModel = new OpenAI({
             temperature: 1,
             maxTokens: 2000,
         });
-        const ideasTemplate = `Create 5 large language modal app ideas to address the issue provided: 
-            
-            {mainIssue}
-            
-            Return your response in a json object with the mainIssue and an array of ideas with the title and description of each idea. Make sure the keys lowercase and no spaces.`;
+
+        // Create a template for the ideas chain with the format instructions from the partialVariables in the promptTemplate and the issue from the main issue chain
+        const ideasTemplate = `Create 5 large language modal app ideas to address the issue:\n{format_instructions}\n{issue}`;
+
         const ideasPromptTemplate = new PromptTemplate({
             template: ideasTemplate,
-            inputVariables: ["mainIssue"],
+            inputVariables: ["issue"],
+            partialVariables: { format_instructions: ideasFormatInstructions },
         });
         const ideasChain = new LLMChain({
             llm: ideasModel,
@@ -85,12 +101,11 @@ export default async function handler(req, res) {
 
         // Run the overall chain with the summary from document loader
         const ideas = await overallChain.run(summary);
-        console.log(ideas);
 
-        // Turn ideas into a json object
-        const ideasObject = JSON.parse(ideas);
+        // Parse the ideas from the output of the chain using the zod schema parser
+        const ideasObject = await ideasParser.parse(ideas);
 
-        data.mainIssue = ideasObject.mainIssue;
+        data.mainIssue = ideasObject.issue;
 
         data.ideas = ideasObject.ideas;
 
