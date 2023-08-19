@@ -5,7 +5,10 @@ import React, { useState } from "react";
 import axios from "axios";
 
 export default function Home() {
-    const [displayError, setDisplayError] = useState(false);
+    const [errorData, setErrorData] = useState({
+        error: "",
+        display: false,
+    });
     const [displayForm, setDisplayForm] = useState(true);
     const [disableButton, setDisableButton] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
@@ -40,12 +43,27 @@ export default function Home() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        setDisplayForm(false);
+        setIsLoading(true);
+
         try {
             const response = await axios.post("/api/form", formData);
+
+            setIsLoading(false);
+            setDisplayDashboard(true);
 
             console.log("Form submitted successfully!", response.data);
         } catch (error) {
             console.error("Error submitting form:", error);
+
+            setErrorData(() => ({
+                error: error.message,
+                display: true,
+            }));
+
+            setDisplayForm(false);
+            setIsLoading(false);
+            setDisplayDashboard(false);
         }
     };
 
@@ -54,12 +72,14 @@ export default function Home() {
             <Head>
                 <title>{siteTitle}</title>
             </Head>
-            {displayError && (
+            {errorData.display && (
                 <Row>
                     <Col>
                         <Alert variant="danger">
                             <Alert.Heading>Oh snap! You got an error!</Alert.Heading>
                             <p>Please try again by reloading the page.</p>
+                            <hr />
+                            <p className="mb-0">{errorData.error}</p>
                         </Alert>
                     </Col>
                 </Row>
@@ -133,10 +153,7 @@ export default function Home() {
                         <Row>
                             <Col>
                                 <h1>Ideas</h1>
-                                <Accordion
-                                    defaultActiveKey={["0"]}
-                                    alwaysOpen
-                                >
+                                <Accordion alwaysOpen>
                                     <Accordion.Item eventKey="0">
                                         <Accordion.Header>Accordion Item #1</Accordion.Header>
                                         <Accordion.Body>
@@ -171,7 +188,7 @@ export default function Home() {
                             </Col>
                             <Col>
                                 <h1>Info</h1>
-                                <Accordion defaultActiveKey={["0"]}>
+                                <Accordion>
                                     <Accordion.Item eventKey="0">
                                         <Accordion.Header>Uploaded Text</Accordion.Header>
                                         <Accordion.Body>{formData.text}</Accordion.Body>
