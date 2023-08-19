@@ -10,8 +10,9 @@ export default function Home() {
         text: "",
     });
 
-    const handleTextChange = (e) => {
+    const handleTextareaChange = (e) => {
         const text = e.target.value;
+
         setFormData((prevData) => ({
             ...prevData,
             text,
@@ -20,7 +21,6 @@ export default function Home() {
 
     const handleTypeChange = (e) => {
         e.persist();
-        console.log(e.target.value);
 
         setFormData((prevState) => ({
             ...prevState,
@@ -30,8 +30,10 @@ export default function Home() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
         try {
             const response = await axios.post("/api/form", formData);
+
             console.log("Form submitted successfully!", response.data);
         } catch (error) {
             console.error("Error submitting form:", error);
@@ -46,17 +48,14 @@ export default function Home() {
             <h1>Welcome to Text-to-Ideas!</h1>
             <p>Upload a document or text and let the LLM figure what is the main issue within the text and present you with project ideas to solve the issue.</p>
             <Form onSubmit={handleSubmit}>
-                <Form.Group
-                    className="mb-3"
-                    controlId="exampleForm.ControlTextarea1"
-                >
-                    <Form.Label>Copy and Paste if needed</Form.Label>
+                <Form.Group controlId="textarea">
+                    <Form.Label>Paste video transcript or document text</Form.Label>
                     <Form.Control
                         as="textarea"
                         rows={4}
-                        name="textValue"
+                        name="text"
                         value={formData.text}
-                        onChange={handleTextChange}
+                        onChange={handleTextareaChange}
                     />
                 </Form.Group>
                 <Form.Group controlId="typeOptions">

@@ -13,13 +13,28 @@ import { StructuredOutputParser } from "langchain/output_parsers";
 
 export default async function handler(req, res) {
     try {
+        // Function to convert user text input to blob
+        function stringToBlob(inputString, mimeType) {
+            const blobOptions = { type: mimeType || "text/plain" };
+            
+            const blob = new Blob([inputString], blobOptions);
+
+            return blob;
+        }
+
+        // Store output data to be sent back to the client
         const data = {
             summary: "",
             mainIssue: "",
             ideas: [],
         };
+
+        // Get the type and text from the request body
         const type = req.body.type;
-        // const text = req.body.text;
+        const text = req.body.text;
+
+        // Set mimeType to text/plain to be used in the blob
+        const mimeType = "text/plain";
 
         // Create the summary from the loaded txt file
         const embeddings = new OpenAIEmbeddings();
@@ -27,7 +42,8 @@ export default async function handler(req, res) {
         const summaryChain = loadQARefineChain(summaryModel);
 
         // Load the documents and create the vector store
-        const loader = new TextLoader("/users/dustinwurtz/desktop/example2.txt");
+        const blob = stringToBlob(text, mimeType);
+        const loader = new TextLoader(blob);
         const docs = await loader.loadAndSplit();
         const store = await MemoryVectorStore.fromDocuments(docs, embeddings);
 
@@ -50,10 +66,12 @@ export default async function handler(req, res) {
         // This is an LLMChain to find the main issue from the summary of the text
         const mainIssueModel = new OpenAI({ temperature: 0 });
         const mainIsueTemplate = `Create a short sentence of the main issue of the summary provided: {summary}`;
+        
         const mainIssuePromptTemplate = new PromptTemplate({
             template: mainIsueTemplate,
             inputVariables: ["summary"],
         });
+        
         const mainIssueChain = new LLMChain({
             llm: mainIssueModel,
             prompt: mainIssuePromptTemplate,
@@ -88,6 +106,7 @@ export default async function handler(req, res) {
             inputVariables: ["issue"],
             partialVariables: { format_instructions: ideasFormatInstructions },
         });
+
         const ideasChain = new LLMChain({
             llm: ideasModel,
             prompt: ideasPromptTemplate,
