@@ -99,7 +99,8 @@ export default async function handler(req, res) {
         });
 
         // Create a template for the ideas chain with the format instructions from the partialVariables in the promptTemplate and the issue from the main issue chain
-        const ideasTemplate = `Create 5 large language modal app ideas to address the issue:\n{format_instructions}\n{issue}`;
+        // const ideasTemplate = `Create 5 large language modal app ideas to address the issue:\n{format_instructions}\n{issue}`;
+        const ideasTemplate = `Create 5 ${type} ideas to address the issue:\n{format_instructions}\n{issue}`;
 
         const ideasPromptTemplate = new PromptTemplate({
             template: ideasTemplate,
