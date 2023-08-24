@@ -48,7 +48,7 @@ export default async function handler(req, res) {
         const store = await MemoryVectorStore.fromDocuments(docs, embeddings);
 
         // Select the relevant documents
-        const question = "Create a one paragraph summary.";
+        const question = "Create a 3 sentence summary.";
         const relevantDocs = await store.similaritySearch(question);
 
         // Call the summary chain
@@ -95,12 +95,12 @@ export default async function handler(req, res) {
 
         const ideasModel = new OpenAI({
             temperature: 1,
-            maxTokens: 2000,
+            maxTokens: 2500,
         });
 
         // Create a template for the ideas chain with the format instructions from the partialVariables in the promptTemplate and the issue from the main issue chain
         // const ideasTemplate = `Create 5 large language modal app ideas to address the issue:\n{format_instructions}\n{issue}`;
-        const ideasTemplate = `Create 5 ${type} ideas to address the issue:\n{format_instructions}\n{issue}`;
+        const ideasTemplate = `Create 5 ${type} ideas to address the issue. Only return the object of data as described in the format instructions:\n{format_instructions}\n{issue}`;
 
         const ideasPromptTemplate = new PromptTemplate({
             template: ideasTemplate,
