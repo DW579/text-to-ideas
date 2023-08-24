@@ -30,8 +30,20 @@ export default function Layout({ children, home }) {
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="me-auto">
-                            <Link href={"/"}>Home</Link>
-                            <Link href={"/about"}>About</Link>
+                            <Link
+                                href="/"
+                                legacyBehavior
+                                passHref
+                            >
+                                <Nav.Link>Home</Nav.Link>
+                            </Link>
+                            <Link
+                                href="/about"
+                                legacyBehavior
+                                passHref
+                            >
+                                <Nav.Link>About</Nav.Link>
+                            </Link>
                         </Nav>
                     </Navbar.Collapse>
                 </Container>
