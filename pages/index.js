@@ -17,6 +17,7 @@ export default function Home() {
         type: "",
         text: "",
     });
+    const [dashboardData, setDashboardData] = useState(null);
 
     const handleTextareaChange = (e) => {
         const text = e.target.value;
@@ -52,7 +53,9 @@ export default function Home() {
             setIsLoading(false);
             setDisplayDashboard(true);
 
-            console.log("Form submitted successfully!", response.data);
+            setDashboardData(response.data.data);
+
+            console.log("Form submitted successfully!", response.data.data);
         } catch (error) {
             console.error("Error submitting form:", error);
 
@@ -145,7 +148,7 @@ export default function Home() {
                                 <Card>
                                     <Card.Body>
                                         <Card.Title>Main Opportunity</Card.Title>
-                                        <Card.Text>Hello text</Card.Text>
+                                        <Card.Text>{dashboardData.mainIssue}</Card.Text>
                                     </Card.Body>
                                 </Card>
                             </Col>
@@ -154,50 +157,27 @@ export default function Home() {
                             <Col>
                                 <h1>Ideas</h1>
                                 <Accordion alwaysOpen>
-                                    <Accordion.Item eventKey="0">
-                                        <Accordion.Header>Accordion Item #1</Accordion.Header>
-                                        <Accordion.Body>
-                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                                        </Accordion.Body>
-                                    </Accordion.Item>
-                                    <Accordion.Item eventKey="1">
-                                        <Accordion.Header>Accordion Item #2</Accordion.Header>
-                                        <Accordion.Body>
-                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                                        </Accordion.Body>
-                                    </Accordion.Item>
-                                    <Accordion.Item eventKey="2">
-                                        <Accordion.Header>Accordion Item #3</Accordion.Header>
-                                        <Accordion.Body>
-                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                                        </Accordion.Body>
-                                    </Accordion.Item>
-                                    <Accordion.Item eventKey="3">
-                                        <Accordion.Header>Accordion Item #4</Accordion.Header>
-                                        <Accordion.Body>
-                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                                        </Accordion.Body>
-                                    </Accordion.Item>
-                                    <Accordion.Item eventKey="4">
-                                        <Accordion.Header>Accordion Item #5</Accordion.Header>
-                                        <Accordion.Body>
-                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                                        </Accordion.Body>
-                                    </Accordion.Item>
+                                    {dashboardData.ideas.map((idea, index) => (
+                                        <Accordion.Item
+                                            key={index}
+                                            eventKey={index}
+                                        >
+                                            <Accordion.Header>{idea.title}</Accordion.Header>
+                                            <Accordion.Body>{idea.description}</Accordion.Body>
+                                        </Accordion.Item>
+                                    ))}
                                 </Accordion>
                             </Col>
                             <Col>
                                 <h1>Info</h1>
                                 <Accordion>
                                     <Accordion.Item eventKey="0">
-                                        <Accordion.Header>Uploaded Text</Accordion.Header>
-                                        <Accordion.Body>{formData.text}</Accordion.Body>
+                                        <Accordion.Header>Summary</Accordion.Header>
+                                        <Accordion.Body>{dashboardData.summary}</Accordion.Body>
                                     </Accordion.Item>
                                     <Accordion.Item eventKey="1">
-                                        <Accordion.Header>Summary</Accordion.Header>
-                                        <Accordion.Body>
-                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                                        </Accordion.Body>
+                                        <Accordion.Header>Uploaded Text</Accordion.Header>
+                                        <Accordion.Body>{formData.text}</Accordion.Body>
                                     </Accordion.Item>
                                 </Accordion>
                             </Col>
