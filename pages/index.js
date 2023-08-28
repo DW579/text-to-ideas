@@ -89,18 +89,18 @@ export default function Home() {
             )}
             {displayForm && (
                 <Row>
-                    <Col>
-                        <Row>
+                    <Col md={{ span: 6, offset: 3 }}>
+                        <Row className="margin-top-20">
                             <Col>
                                 <h1>Welcome to Text-to-Ideas!</h1>
-                                <p>Utilizing the capabilities of Chat-GPT, generate five concepts across various topics using the content from a YouTube transcript or any given document. Just copy and paste the text into the provided textarea, indicate your preferred subject for the ideas, and then proceed to click the submit button. Once ChatGPT is done, a dashboard will promptly produce five innovative notions falling within the scope of your chosen subject matter.</p>
+                                <p>Utilizing the capabilities of Chat-GPT, generate five concepts across various topics using the content from a YouTube transcript or any given document. Just copy and paste the text into the provided textarea, indicate your preferred subject for the ideas, and then proceed to click the submit button. Once ChatGPT is done, a dashboard will promptly produce five innovative project ideas falling within the scope of your chosen subject matter.</p>
                             </Col>
                         </Row>
                         <Row>
-                            <Col>
+                            <Col className="">
                                 <Form onSubmit={handleSubmit}>
-                                    <Form.Group controlId="textarea">
-                                        <Form.Label>Paste video transcript, document, or any text below</Form.Label>
+                                    <Form.Group controlId="textarea" className="margin-top-20">
+                                        <Form.Label>Paste video transcript, document text, or any text below</Form.Label>
                                         <Form.Control
                                             as="textarea"
                                             rows={4}
@@ -109,22 +109,22 @@ export default function Home() {
                                             onChange={handleTextareaChange}
                                         />
                                     </Form.Group>
-                                    <Form.Group controlId="typeOptions">
+                                    <Form.Group controlId="typeOptions" className="margin-top-20">
                                         <Form.Label>Select subject matter of ideas to generate</Form.Label>
                                         <Form.Check
                                             type="radio"
                                             name="selectedOption"
-                                            value="large language model (llm)"
-                                            label="Large Language Model (LLM)"
-                                            checked={formData.type === "large language model (llm)"}
+                                            value="Large Language Model (LLM)"
+                                            label="Large Language Model (LLM) Software Apps"
+                                            checked={formData.type === "Large Language Model (LLM)"}
                                             onChange={handleTypeChange}
                                         />
                                         <Form.Check
                                             type="radio"
                                             name="selectedOption"
-                                            value="mechanical"
-                                            label="Mechanical"
-                                            checked={formData.type === "mechanical"}
+                                            value="Mechanical"
+                                            label="Mechanical Projects"
+                                            checked={formData.type === "Mechanical"}
                                             onChange={handleTypeChange}
                                         />
                                     </Form.Group>
@@ -132,6 +132,7 @@ export default function Home() {
                                         variant="primary"
                                         type="submit"
                                         disabled={disableButton}
+                                        className="margin-top-20"
                                     >
                                         Submit
                                     </Button>
@@ -143,16 +144,16 @@ export default function Home() {
             )}
             {isLoading && (
                 <Row>
-                    <Col>
+                    <Col md={{ span: 4, offset: 4 }} className="margin-top-20 center">
                         <Spinner animation="border" />
-                        <p>Loading...</p>
+                        <p>Generating 5 {formData.type} Ideas...</p>
                     </Col>
                 </Row>
             )}
             {displayDashboard && (
                 <Row>
                     <Col>
-                        <Row>
+                        <Row className="margin-top-20">
                             <Col>
                                 <Card>
                                     <Card.Body>
@@ -162,23 +163,26 @@ export default function Home() {
                                 </Card>
                             </Col>
                         </Row>
-                        <Row>
+                        <Row className="margin-top-20">
                             <Col>
-                                <h1>Ideas</h1>
+                                <h3>5 {formData.type} Ideas</h3>
                                 <Accordion alwaysOpen>
                                     {dashboardData.ideas.map((idea, index) => (
+                                        // Increment index by 1 to start at 1 instead of 0
+                                        index++,
+                                        
                                         <Accordion.Item
                                             key={index}
                                             eventKey={index}
                                         >
-                                            <Accordion.Header>{idea.title}</Accordion.Header>
+                                            <Accordion.Header>{index + ". " + idea.title}</Accordion.Header>
                                             <Accordion.Body>{idea.description}</Accordion.Body>
                                         </Accordion.Item>
                                     ))}
                                 </Accordion>
                             </Col>
                             <Col>
-                                <h1>Info</h1>
+                                <h3>Info</h3>
                                 <Accordion>
                                     <Accordion.Item eventKey="0">
                                         <Accordion.Header>Summary</Accordion.Header>
