@@ -28,7 +28,7 @@ export default function Layout({ children, home }) {
                 <Container>
                     <Navbar.Brand>Text-to-Ideas</Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                    <Navbar.Collapse id="basic-navbar-nav">
+                    {/* <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="me-auto">
                             <Link
                                 href="/"
@@ -45,7 +45,7 @@ export default function Layout({ children, home }) {
                                 <Nav.Link>About</Nav.Link>
                             </Link>
                         </Nav>
-                    </Navbar.Collapse>
+                    </Navbar.Collapse> */}
                 </Container>
             </Navbar>
             <main>{children}</main>

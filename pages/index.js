@@ -90,45 +90,54 @@ export default function Home() {
             {displayForm && (
                 <Row>
                     <Col>
-                        <h1>Welcome to Text-to-Ideas!</h1>
-                        <p>Upload a document or text and let the LLM figure what is the main issue within the text and present you with project ideas to solve the issue.</p>
-                        <Form onSubmit={handleSubmit}>
-                            <Form.Group controlId="textarea">
-                                <Form.Label>Paste video transcript or document text</Form.Label>
-                                <Form.Control
-                                    as="textarea"
-                                    rows={4}
-                                    name="text"
-                                    value={formData.text}
-                                    onChange={handleTextareaChange}
-                                />
-                            </Form.Group>
-                            <Form.Group controlId="typeOptions">
-                                <Form.Check
-                                    type="radio"
-                                    name="selectedOption"
-                                    value="large language model (llm)"
-                                    label="Large Language Model (LLM)"
-                                    checked={formData.type === "large language model (llm)"}
-                                    onChange={handleTypeChange}
-                                />
-                                <Form.Check
-                                    type="radio"
-                                    name="selectedOption"
-                                    value="mechanical"
-                                    label="Mechanical"
-                                    checked={formData.type === "mechanical"}
-                                    onChange={handleTypeChange}
-                                />
-                            </Form.Group>
-                            <Button
-                                variant="primary"
-                                type="submit"
-                                disabled={disableButton}
-                            >
-                                Submit
-                            </Button>
-                        </Form>
+                        <Row>
+                            <Col>
+                                <h1>Welcome to Text-to-Ideas!</h1>
+                                <p>Utilizing the capabilities of Chat-GPT, generate five concepts across various topics using the content from a YouTube transcript or any given document. Just copy and paste the text into the provided textarea, indicate your preferred subject for the ideas, and then proceed to click the submit button. Once ChatGPT is done, a dashboard will promptly produce five innovative notions falling within the scope of your chosen subject matter.</p>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <Form onSubmit={handleSubmit}>
+                                    <Form.Group controlId="textarea">
+                                        <Form.Label>Paste video transcript, document, or any text below</Form.Label>
+                                        <Form.Control
+                                            as="textarea"
+                                            rows={4}
+                                            name="text"
+                                            value={formData.text}
+                                            onChange={handleTextareaChange}
+                                        />
+                                    </Form.Group>
+                                    <Form.Group controlId="typeOptions">
+                                        <Form.Label>Select subject matter of ideas to generate</Form.Label>
+                                        <Form.Check
+                                            type="radio"
+                                            name="selectedOption"
+                                            value="large language model (llm)"
+                                            label="Large Language Model (LLM)"
+                                            checked={formData.type === "large language model (llm)"}
+                                            onChange={handleTypeChange}
+                                        />
+                                        <Form.Check
+                                            type="radio"
+                                            name="selectedOption"
+                                            value="mechanical"
+                                            label="Mechanical"
+                                            checked={formData.type === "mechanical"}
+                                            onChange={handleTypeChange}
+                                        />
+                                    </Form.Group>
+                                    <Button
+                                        variant="primary"
+                                        type="submit"
+                                        disabled={disableButton}
+                                    >
+                                        Submit
+                                    </Button>
+                                </Form>
+                            </Col>
+                        </Row>
                     </Col>
                 </Row>
             )}
